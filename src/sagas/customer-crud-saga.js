@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
 import fetch from 'isomorphic-fetch'
-import * as actions from './modules/grid'
+import * as actions from './actions/grid'
 import * as api from '../lib/api'
 
 export function* fetchGrids(action) {

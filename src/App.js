@@ -1,19 +1,44 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Link, Route} from 'react-router-dom';
+import AddCustomerPage from './pages/customer/AddCustomerPage';
+import AllCustomersPage from './pages/customer/AllCustomersPage';
+import EditCustomerPage from './pages/customer/EditCustomerPage';
+import CustomerDetailPage from './pages/customer/CustomerDetailPage';
 
 class App extends Component {
   render() {
+
+    const {location} = this.props;
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Link to='/'>Home</Link>
+        <Link to='/new/customer'>Add Customer</Link>
+        
+
+        <Route
+              location={location}
+              path="/"
+              exact
+              component={ AllCustomersPage } />
+
+        <Route location={location} 
+              path="/new/customer"
+              exact
+              component={ AddCustomerPage } />
+        <Route location={location}
+              path="/customer/edit/:id"
+              exact
+              component={EditCustomerPage} />
+        <Route
+              location={location}
+              path="/customer/detail/:id"
+              exact
+              component={CustomerDetailPage}
+            />
+
       </div>
+    
     );
   }
 }
