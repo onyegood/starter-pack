@@ -11,9 +11,9 @@ import {
   UPDATE_SINGLE_CUSTOMER_REQUEST,
   UPDATE_SINGLE_CUSTOMER_SUCCESS,
   UPDATE_SINGLE_CUSTOMER_FAILURE,
-  DELETE_SINGLE_CUSTOMER_REQUEST,
-  DELETE_SINGLE_CUSTOMER_SUCCESS,
-  DELETE_SINGLE_CUSTOMER_FAILURE
+  CUSTOMER_DELETED_REQUEST,
+  CUSTOMER_DELETED_SUCCESS,
+  CUSTOMER_DELETE_FAILD
 } from "../types";
 
 export const addCustomerRequest = customer => ({
@@ -69,10 +69,9 @@ export const updateSingleCustomerRequest = (customer, id) => ({
   id
 });
 
-export const updateSingleCustomerSuccess = (customer, id, newData) => ({
+export const updateSingleCustomerSuccess = (customer, id) => ({
   type: UPDATE_SINGLE_CUSTOMER_SUCCESS,
   customer,
-  newData,
   id
 });
 
@@ -81,17 +80,17 @@ export const updateSingleCustomerFailure = errors => ({
   errors
 });
 
-export const deleteSingleCustomerRequest = customer => ({
-  type: DELETE_SINGLE_CUSTOMER_REQUEST,
-  customer
+export const deleteCustomerRequest = (id) => ({
+  type: CUSTOMER_DELETED_REQUEST,
+  id
 });
 
-export const deleteSingleCustomerSuccess = (customer) => ({
-  type: DELETE_SINGLE_CUSTOMER_SUCCESS,
-  customer
+export const deleteCustomerSuccess = (id) => ({
+  type: CUSTOMER_DELETED_SUCCESS,
+  id
 });
 
-export const deleteSingleCustomerFailure = errors => ({
-  type: DELETE_SINGLE_CUSTOMER_FAILURE,
+export const deleteCustomerFaild = errors => ({
+  type: CUSTOMER_DELETE_FAILD,
   errors
 });

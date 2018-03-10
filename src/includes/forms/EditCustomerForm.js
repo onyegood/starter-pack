@@ -2,7 +2,10 @@ import React from "react";
 import {connect} from "react-redux";
 import propTypes from "prop-types";
 import isEmail from "validator/lib/isEmail";
-import {updateSingleCustomerRequest, fetchSingleCustomerRequest} from "../../actions/customerActions";
+import {
+    updateSingleCustomerRequest,
+    fetchSingleCustomerRequest
+} from "../../actions/customerActions";
 
 class EditCustomerForm extends React.Component {
     state = {
@@ -41,9 +44,7 @@ class EditCustomerForm extends React.Component {
 
     componentWillMount = () => {
         if (this.props.data.match.params.id) {
-            this
-                .props
-                .fetchSingleCustomerRequest(this.props.data.match.params.id);
+            this.props.fetchSingleCustomerRequest(this.props.data.match.params.id);
         }
     };
 
@@ -60,9 +61,7 @@ class EditCustomerForm extends React.Component {
         this.setState({errors});
         if (Object.keys(errors).length === 0) {
             this.setState({loading: true});
-            this
-                .props
-                .submit(this.state.data)
+            this.props.updateSingleCustomerRequest(this.state.data, this.props.data.match.params.id)
         }
     };
 
@@ -89,7 +88,8 @@ class EditCustomerForm extends React.Component {
 
     render() {
 
-        const {data, errors, loaded} = this.state;
+        const {data} = this.state;
+        const errors = this.state.errors || {};
 
         return (
             <form onSubmit={this.onSubmit}>
@@ -202,7 +202,8 @@ class EditCustomerForm extends React.Component {
 }
 
 EditCustomerForm.propTypes = {
-    submit: propTypes.func.isRequired
+    submit: propTypes.func.isRequired,
+    actions: propTypes.func.isRequired
 };
 
 function mapStateToProps(state, props) {
@@ -218,12 +219,9 @@ function mapStateToProps(state, props) {
     return {serverErrors: state.formErrors.customer, isLoading: state.customers.isLoading, customer: null};
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {   onupdateSingleCustomerRequest: (customer) => {
-            dispatch(updateSingleCustomerRequest(customer))   } }
+const mapDispatchToProps  = {
+    updateSingleCustomerRequest,
+    fetchSingleCustomerRequest
 }
 
-export default connect(mapStateToProps, {
-    submit: updateSingleCustomerRequest,
-    fetchSingleCustomerRequest
-})(EditCustomerForm);
+export default connect(mapStateToProps, mapDispatchToProps)(EditCustomerForm);

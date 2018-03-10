@@ -4,7 +4,7 @@ import {
 	FETCH_CUSTOMERS_REQUEST,
 	FETCH_SINGLE_CUSTOMER_REQUEST,
 	UPDATE_SINGLE_CUSTOMER_REQUEST,
-	DELETE_SINGLE_CUSTOMER_REQUEST
+	CUSTOMER_DELETED_REQUEST
 } from "./types";
 
 
@@ -13,7 +13,7 @@ import {
 	fetchCustomersSaga,
 	fetchSingleCustomersSaga,
 	updateSingleCustomersSaga,
-	deleteSingleCustomersSaga
+	deleteCustomerSaga
 } from "./sagas/customersSagas";
 
 export default function* rootSaga() {
@@ -21,5 +21,5 @@ export default function* rootSaga() {
 	yield takeLatest(ADD_CUSTOMER_REQUEST, addCustomerSaga);
 	yield takeLatest(FETCH_SINGLE_CUSTOMER_REQUEST, fetchSingleCustomersSaga);
 	yield takeLatest(UPDATE_SINGLE_CUSTOMER_REQUEST, updateSingleCustomersSaga);
-	yield takeLatest(DELETE_SINGLE_CUSTOMER_REQUEST, deleteSingleCustomersSaga);
+	yield takeLatest(CUSTOMER_DELETED_REQUEST, deleteCustomerSaga);
 }

@@ -2,17 +2,21 @@ import React from "react";
 import propTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const CustomersListCard = ({ customers }) => (
-    <div className="container" style={{
-        height: "100vh"
-    }}>
+const CustomersListCard = ({ customers, deleteCustomerRequest }) => {
+
+// deleteCustomerRequest = (event) => {
+//     event.preventDefault();
+// };
+
+    return (
+    <div className="container" style={{height: "100vh" }}>
         <div className="row align-items-center">
             {
                     customers.map(customer => (
-                        <div className="col-md-3" key={customer.id}>
+                        <div className="col-md-3" key={customer.id} deleteCustomerRequest={deleteCustomerRequest}>
                             <div className="card">
                                 <div className="card-header">
-                                    <h5>{customer.first_name + ' ' + customer.last_name}</h5>
+                                    <h5>{customer.first_name} {customer.last_name}</h5>
                                 </div>
                                 <div className="card-body">
                                     <p>{customer.email}</p>
@@ -20,11 +24,21 @@ const CustomersListCard = ({ customers }) => (
 
                                 <div className="card-footer">
 
-                                    <Link to={`/customer/detail/${customer.id}`} className="btn btn-primary">Detail</Link >
+                                    <Link to={`/customer/detail/${customer.id}`}
+                                        className="btn btn-primary">
+                                        Detail
+                                    </Link >
 
-                                    <Link to="/" className="btn btn-danger">Delete</Link>
+                                    <button 
+                                        onClick={(event) => deleteCustomerRequest(customer.id)}
+                                        className="btn btn-danger">
+                                        Delete
+                                    </button>
 
-                                    <Link to={`/customer/edit/${customer.id}`} className="btn btn-success">Edit</Link>
+                                    <Link to={`/customer/edit/${customer.id}`} 
+                                        className="btn btn-success">
+                                        Edit
+                                    </Link>
 
                                 </div>
                             </div>
@@ -33,7 +47,7 @@ const CustomersListCard = ({ customers }) => (
             }
         </div>
     </div>
-);
+)};
 
 CustomersListCard.propTypes = {
     customers: propTypes
@@ -42,8 +56,8 @@ CustomersListCard.propTypes = {
             first_name: propTypes.string.isRequired, 
             last_name: propTypes.string.isRequired, 
             email: propTypes.string.isRequired
-        })).isRequired
-
+        })).isRequired,
+    deleteCustomerRequest: propTypes.func.isRequired
 };
 
 export default CustomersListCard;

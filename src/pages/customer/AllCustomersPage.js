@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchCustomersSuccess } from "../../actions/customerActions";
+import propTypes from "prop-types";
+import {fetchCustomersSuccess, deleteCustomerRequest} from "../../actions/customerActions";
 import CustomersListCard from "../../includes/cards/CustomersListCard";
 
 class AllCustomersPage extends Component {
@@ -13,6 +14,10 @@ class AllCustomersPage extends Component {
        this.props.fetchCustomersSuccess;
     }
 
+    deleteCustomerRequest = (event) => {
+        event.preventDefault();
+    }
+
     render() {
         const { customers, isLoading } = this.props
 
@@ -23,11 +28,15 @@ class AllCustomersPage extends Component {
         return (
             <div>
                 <h1>Customers Lists</h1>
-                <CustomersListCard customers={customers}/>
+                <CustomersListCard 
+                customers={customers} deleteCustomerRequest={this.props.deleteCustomerRequest}/>
             </div>
         );
     }
 }
+AllCustomersPage.propTypes = {
+    deleteCustomerRequest: propTypes.func.isRequired
+};
 
 const mapStateToProps = (state) => ({
     isLoading : state.customers.isLoading,
@@ -36,6 +45,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    fetchCustomersSuccess
+    fetchCustomersSuccess,
+    deleteCustomerRequest
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AllCustomersPage);

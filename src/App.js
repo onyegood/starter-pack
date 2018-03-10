@@ -12,8 +12,8 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Link to='/'>Home</Link>
-        <Link to='/new/customer'>Add Customer</Link>
+        <Link to="/">Home</Link>
+        <Link to="/new/customer">Add Customer</Link>
         
 
         <Route
