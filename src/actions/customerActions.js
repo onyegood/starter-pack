@@ -54,7 +54,7 @@ export const fetchSingleCustomerRequest = customer => ({
 
 export const fetchSingleCustomerSuccess = (customer, id) => ({
   type: FETCH_SINGLE_CUSTOMER_SUCCESS,
-  customer: customer,
+  customer,
   id: id
 });
 
@@ -63,19 +63,19 @@ export const fetchSingleCustomerFailure = errors => ({
   errors
 });
 
-export const updateSingleCustomerRequest = (customer, id) => ({
+export const updateCustomerRequest = (customer, id) => ({
   type: UPDATE_SINGLE_CUSTOMER_REQUEST,
   customer,
   id
 });
 
-export const updateSingleCustomerSuccess = (customer, id) => ({
+export const updateCustomerSuccess = (customer, id) => ({
   type: UPDATE_SINGLE_CUSTOMER_SUCCESS,
   customer,
   id
 });
 
-export const updateSingleCustomerFailure = errors => ({
+export const updateCustomerFailure = errors => ({
   type: UPDATE_SINGLE_CUSTOMER_FAILURE,
   errors
 });

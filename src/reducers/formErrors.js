@@ -7,7 +7,7 @@ import {
   	CUSTOMER_DELETE_FAILD
 } from "../types";
 
-export default function formErrors(state = {}, action = {}, loaded : false) {
+export default function formErrors(state = {}, action = {}, loaded = false) {
 	switch (action.type) {
 		case ADD_CUSTOMER_REQUEST:
 			return {...state, customer: {}, loaded: true};

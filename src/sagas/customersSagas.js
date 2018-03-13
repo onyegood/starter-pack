@@ -1,5 +1,7 @@
-import {put} from "redux-saga/effects";
+import {put, call} from "redux-saga/effects";
 import axios from "axios";
+
+import api from "../services/api";
 import {baseURL} from "../baseURL";
 
 import {
@@ -9,8 +11,8 @@ import {
 	addCustomerSuccess,
 	fetchSingleCustomerSuccess,
 	fetchSingleCustomerFailure,
-	updateSingleCustomerFailure,
-	updateSingleCustomerSuccess,
+	updateCustomerFailure,
+	updateCustomerSuccess,
 	deleteCustomerSuccess,
 	deleteCustomerFaild
 } from "../actions/customerActions";
@@ -20,7 +22,9 @@ export function* addCustomerSaga(action) {
 	try {
 		const response = yield axios.post(baseURL + `api/customer`, action.customer)
 		yield put(addCustomerSuccess(response.data.customer));
-		history.push('/');
+		//Update State
+		const res = yield axios.get(baseURL + `api/customers`)
+		yield put(fetchCustomersSuccess(res.data.customers));
 	} catch (err) {
 		yield put(addCustomerFailure(err.response.data.errors));
 	}
@@ -28,6 +32,8 @@ export function* addCustomerSaga(action) {
 
 export function* fetchCustomersSaga() {
   try {
+		// const customers = yield call(api.customers.getCustomers)
+		// yield put(fetchCustomersSuccess(customers));
 		const response = yield axios.get(baseURL + `api/customers`)
 		yield put(fetchCustomersSuccess(response.data.customers));
 	} catch (err) {
@@ -44,20 +50,26 @@ export function* fetchSingleCustomersSaga(action) {
 	}
 }
 
-export function* updateSingleCustomersSaga(action) {
+export function* updateCustomersSaga(action) {
   try {
-		const response = yield axios.put(baseURL + `api/customer/update/${action.customer.id}`, action.customer)
-		yield put(updateSingleCustomerSuccess(response.data.customer));
-		history.push('/');
+		yield axios.put(baseURL + `api/customer/update/${action.customer.id}`, action.customer);
+		yield put(updateCustomerSuccess(action));
+		//Update State
+		const response = yield axios.get(baseURL + `api/customers`)
+		yield put(fetchCustomersSuccess(response.data.customers));
+
 	} catch (err) {
-	   yield put(updateSingleCustomerFailure(err));
+	   yield put(updateCustomerFailure(err));
 	}
 }
 
 export function* deleteCustomerSaga(action) {
   try {
 		yield axios.delete(baseURL + `/api/customer/delete/${action.id}`)
-		yield put(deleteCustomerSuccess(action.id));
+		yield put(deleteCustomerSuccess(action));
+		//Update State
+		const response = yield axios.get(baseURL + `api/customers`)
+		yield put(fetchCustomersSuccess(response.data.customers));
 	} catch (err) {
 	   yield put(deleteCustomerFaild(err));
 	}

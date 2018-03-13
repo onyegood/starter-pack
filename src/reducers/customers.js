@@ -7,18 +7,18 @@ import {
   FETCH_SINGLE_CUSTOMER_SUCCESS,
   UPDATE_SINGLE_CUSTOMER_REQUEST,
   UPDATE_SINGLE_CUSTOMER_SUCCESS,
-  CUSTOMER_DELETED,
   CUSTOMER_DELETED_SUCCESS,
   CUSTOMER_DELETED_REQUEST
 } from "../types";
 
 const initialState = {
   isLoading: false,
+  msg: false,
   errors: null,
   customers: []
 }
 
-export default function (state = initialState, action = {}) {
+export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_CUSTOMER_REQUEST:
     case FETCH_SINGLE_CUSTOMER_REQUEST:
@@ -55,14 +55,14 @@ export default function (state = initialState, action = {}) {
       return {
         ...state,
         isLoading: false,
-        customers: [state.customers.filter(customer => customer.id !== action.customer.id, action.customer)]
+        msg: true,
+        customer: [state.customers.filter(customer => customer.id !== action.customer.id, action.customer)]
       }
 
     case CUSTOMER_DELETED_SUCCESS:
-    return {
-      isLoading: false,
-      customer: state.customers.filter(customer => customer.id !== action.customerId)
-    }
+    // return state.customers.filter(customer => customer.id !== action.id)
+    const newState = state.filter(customer => customer.id !== action.id)
+    return newState;
 
     default:
       return state;

@@ -1,15 +1,13 @@
-import React from "react";
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import {connect} from "react-redux";
-import propTypes from "prop-types";
 import isEmail from "validator/lib/isEmail";
 import {
-    updateSingleCustomerRequest,
-    fetchSingleCustomerRequest
+    updateCustomerRequest
 } from "../../actions/customerActions";
 
-class EditCustomerForm extends React.Component {
+class EditCustomerForm extends Component {
     state = {
-        data: {
             id: this.props.customer
                 ? this.props.customer.id
                 : null,
@@ -33,54 +31,58 @@ class EditCustomerForm extends React.Component {
                 : '',
             phone: this.props.customer
                 ? this.props.customer.phone
-                : ''
-        },
+                : '',
         errors: {}
     };
 
     componentWillReceiveProps(nextProps) {
         this.setState({errors: nextProps.serverErrors});
-    };
 
-    componentWillMount = () => {
-        if (this.props.data.match.params.id) {
-            this.props.fetchSingleCustomerRequest(this.props.data.match.params.id);
-        }
+        this.setState({
+                id: nextProps.customer.id,
+                first_name: nextProps.customer.first_name,
+                last_name: nextProps.customer.last_name,
+                email: nextProps.customer.email,
+                address: nextProps.customer.address,
+                state: nextProps.customer.state,
+                city: nextProps.customer.city,
+                phone: nextProps.customer.phone
+            });
+        
     };
 
     onChange = e => this.setState({
-        data: {
-            ...this.state.data,
-            [e.target.name]: e.target.value
-        }
+        ...this.state,
+        [e.target.name]: e.target.value
     });
 
     onSubmit = e => {
         e.preventDefault();
-        const errors = this.validate(this.state.data);
+        const errors = this.validate(this.state);
         this.setState({errors});
+        
         if (Object.keys(errors).length === 0) {
-            this.setState({loading: true});
-            this.props.updateSingleCustomerRequest(this.state.data, this.props.data.match.params.id)
+            this.setState({isLoading: true});
+            this.props.updateCustomerRequest(this.state, this.props.data.match.params.id);
+            this.setState({msg: true});
         }
     };
 
-    validate = data => {
+    validate() {
         const errors = {};
-
-        if (!isEmail(data.email)) 
+        if (!isEmail(this.state.email)) 
             errors.email = "Invalid email";
-        if (!data.first_name) 
+        if (!this.state.first_name) 
             errors.first_name = "Can't be blank";
-        if (!data.last_name) 
+        if (!this.state.last_name) 
             errors.last_name = "Can't be blank";
-        if (!data.address) 
+        if (!this.state.address) 
             errors.address = "Can't be blank";
-        if (!data.state) 
+        if (!this.state.state) 
             errors.state = "Can't be blank";
-        if (!data.city) 
+        if (!this.state.city) 
             errors.city = "Can't be blank";
-        if (!data.phone) 
+        if (!this.state.phone) 
             errors.phone = "Can't be blank";
         
         return errors;
@@ -88,18 +90,19 @@ class EditCustomerForm extends React.Component {
 
     render() {
 
-        const {data} = this.state;
+        const {msg, isLoading} = this.state;
         const errors = this.state.errors || {};
 
-        return (
-            <form onSubmit={this.onSubmit}>
+
+        const form = <form onSubmit={this.onSubmit}>
+                
                 <div className="form-group">
                     <label htmlFor="first_name">First Name</label>
                     <input
                         type="text"
                         id="first_name"
                         name="first_name"
-                        value={data.first_name}
+                        value={this.state.first_name}
                         onChange={this.onChange}
                         className={errors.first_name
                         ? "form-control is-invalid"
@@ -113,7 +116,7 @@ class EditCustomerForm extends React.Component {
                         type="text"
                         id="last_name"
                         name="last_name"
-                        value={data.last_name}
+                        value={this.state.last_name}
                         onChange={this.onChange}
                         className={errors.last_name
                         ? "form-control is-invalid"
@@ -127,7 +130,7 @@ class EditCustomerForm extends React.Component {
                         type="email"
                         id="email"
                         name="email"
-                        value={data.email}
+                        value={this.state.email}
                         onChange={this.onChange}
                         className={errors.email
                         ? "form-control is-invalid"
@@ -141,7 +144,7 @@ class EditCustomerForm extends React.Component {
                         type="state"
                         id="state"
                         name="state"
-                        value={data.state}
+                        value={this.state.state}
                         onChange={this.onChange}
                         className={errors.state
                         ? "form-control is-invalid"
@@ -155,7 +158,7 @@ class EditCustomerForm extends React.Component {
                         type="city"
                         id="city"
                         name="city"
-                        value={data.city}
+                        value={this.state.city}
                         onChange={this.onChange}
                         className={errors.city
                         ? "form-control is-invalid"
@@ -169,7 +172,7 @@ class EditCustomerForm extends React.Component {
                         type="phone"
                         id="phone"
                         name="phone"
-                        value={data.phone}
+                        value={this.state.phone}
                         onChange={this.onChange}
                         className={errors.phone
                         ? "form-control is-invalid"
@@ -183,7 +186,7 @@ class EditCustomerForm extends React.Component {
                         type="address"
                         id="address"
                         name="address"
-                        value={data.address}
+                        value={this.state.address}
                         onChange={this.onChange}
                         className={errors.address
                         ? "form-control is-invalid"
@@ -191,20 +194,24 @@ class EditCustomerForm extends React.Component {
                     <div className="invalid-feedback">{errors.address}</div>
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-block">
-                    Update
+                <button 
+                    type="submit" 
+                    className={isLoading ? 'btn btn-success btn-block' : 'btn btn-primary btn-block'}>
+                    {isLoading ? 'Updated!' : 'Update'}
                 </button>
 
-            </form>
+        </form>;
+        
+        // if (msg) {
+		// 	return <p>You have successfully updated you profile! <Link to="/">Back to Customers List</Link></p>
+		// }
+
+        return ( 
+            form
         );
 
     }
 }
-
-EditCustomerForm.propTypes = {
-    submit: propTypes.func.isRequired,
-    actions: propTypes.func.isRequired
-};
 
 function mapStateToProps(state, props) {
     if (props.data.match.params.id) {
@@ -216,12 +223,16 @@ function mapStateToProps(state, props) {
         }
     }
 
-    return {serverErrors: state.formErrors.customer, isLoading: state.customers.isLoading, customer: null};
+    return {
+        serverErrors: state.formErrors.customer,
+        msg : state.customers.msg,
+        isLoading : state.customers.isLoading,
+        customer: null
+    };
 };
 
 const mapDispatchToProps  = {
-    updateSingleCustomerRequest,
-    fetchSingleCustomerRequest
+    updateCustomerRequest
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditCustomerForm);

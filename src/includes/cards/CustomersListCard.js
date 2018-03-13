@@ -4,16 +4,15 @@ import { Link } from "react-router-dom";
 
 const CustomersListCard = ({ customers, deleteCustomerRequest }) => {
 
-// deleteCustomerRequest = (event) => {
-//     event.preventDefault();
-// };
-
     return (
     <div className="container" style={{height: "100vh" }}>
         <div className="row align-items-center">
             {
                     customers.map(customer => (
-                        <div className="col-md-3" key={customer.id} deleteCustomerRequest={deleteCustomerRequest}>
+                        <div className="col-md-3" 
+                            key={customer.id} 
+                            deleteCustomerRequest={deleteCustomerRequest}>
+
                             <div className="card">
                                 <div className="card-header">
                                     <h5>{customer.first_name} {customer.last_name}</h5>
@@ -29,11 +28,11 @@ const CustomersListCard = ({ customers, deleteCustomerRequest }) => {
                                         Detail
                                     </Link >
 
-                                    <button 
-                                        onClick={(event) => deleteCustomerRequest(customer.id)}
+                                    <span 
+                                        onClick={() => deleteCustomerRequest(customer.id)}
                                         className="btn btn-danger">
                                         Delete
-                                    </button>
+                                    </span>
 
                                     <Link to={`/customer/edit/${customer.id}`} 
                                         className="btn btn-success">

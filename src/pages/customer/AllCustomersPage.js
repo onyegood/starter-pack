@@ -9,17 +9,9 @@ class AllCustomersPage extends Component {
     state = {
         customers: []
     }
-
-    componentDidMount() {
-       this.props.fetchCustomersSuccess;
-    }
-
-    deleteCustomerRequest = (event) => {
-        event.preventDefault();
-    }
-
+    
     render() {
-        const { customers, isLoading } = this.props
+        const { customers, isLoading } = this.props;
 
 		if (isLoading) {
 			return <p>loading, please wait...</p>
@@ -29,7 +21,8 @@ class AllCustomersPage extends Component {
             <div>
                 <h1>Customers Lists</h1>
                 <CustomersListCard 
-                customers={customers} deleteCustomerRequest={this.props.deleteCustomerRequest}/>
+                customers={customers} 
+                deleteCustomerRequest={this.props.deleteCustomerRequest}/>
             </div>
         );
     }
@@ -41,7 +34,7 @@ AllCustomersPage.propTypes = {
 const mapStateToProps = (state) => ({
     isLoading : state.customers.isLoading,
     customers : state.customers.customers,
-    serverErrors : state.formErrors.customer
+    serverErrors : state.formErrors.customers
 });
 
 const mapDispatchToProps = {
